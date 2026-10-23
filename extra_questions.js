@@ -1,0 +1,103 @@
+// Extra questions written from the user's lecture slides (personal study use).
+// Helpers: the correct answer(s) are listed first; the game shuffles the display order.
+(function(){
+const mc  = (m,src,q,good,bad)=>{ const g=[].concat(good); return {m,src,q,o:g.concat(bad),a:g.map((_,i)=>i)}; };
+const ord = (m,src,q,items)=>({m,src,type:'order',q,items});
+const mat = (m,src,q,pairs)=>({m,src,type:'match',q,pairs});
+const S1='M1 slides', W='Wk2 slides', M3='M3 slides', M5='M5 slides';
+
+window.EXTRA_QUESTIONS = [
+/* ---------------- Module 1 (CCNA1 Module 1 deck + Week 2 devices) ---------------- */
+mc(1,S1,'In client-server terms, what do clients do?','Send requests to servers to retrieve information',['Store corporate files for everyone','Provide information to end devices','Forward frames between switches']),
+mc(1,S1,'Which server type stores corporate and user files that client devices access?','File server',['Web server','Email server','DNS server']),
+mc(1,S1,'A device acts as both a client and a server on a small network with no central server. Which design is this?','Peer-to-peer',['Client-server only','Hierarchical core','Extranet']),
+mc(1,S1,'Which two are advantages of a peer-to-peer network? (Choose two.)',['Easy to set up','Lower cost'],['Centralized administration','Highly scalable','Stronger security than client-server']),
+mc(1,S1,'Which two are disadvantages of a peer-to-peer network? (Choose two.)',['No centralized administration','Not scalable'],['Complex to set up','Requires a dedicated server','Higher cost than client-server']),
+mc(1,S1,'Peer-to-peer network design is only recommended for which kind of network?','Very small networks',['Large enterprise networks','Service-provider WANs','Data centers']),
+mc(1,S1,'Which three functions are performed by intermediary devices? (Choose three.)',['Regenerate and retransmit data signals','Maintain information about what pathways exist in the network','Notify other devices of errors and communication failures'],['Originate the data that enters the network','Run the user’s email client','Act as the final destination of the message']),
+mc(1,S1,'Which network type connects a few computers to each other and to the Internet within a home?','Small home network',['SOHO network','Medium to large network','World wide network']),
+mc(1,S1,'Which network type lets a computer in a home or remote office connect to a corporate network?','Small office/home office (SOHO)',['Small home network','Campus WAN','Content delivery network']),
+mc(1,S1,'Which two statements describe a WAN? (Choose two.)',['It interconnects LANs over wide geographical areas.','It is typically administered by one or more service providers.'],['It is administered by a single organization or individual.','It provides high-speed bandwidth to internal devices.','It spans a small geographical area.']),
+mc(1,S1,'Which two statements describe a LAN? (Choose two.)',['It is administered by a single organization or individual.','It provides high-speed bandwidth to internal devices.'],['It is typically administered by service providers.','It interconnects LANs over wide geographical areas.','It typically provides slower links than a WAN.']),
+mc(1,S1,'Which technology splits traffic into packets that can each take a different path, providing redundancy?','Packet switching',['Circuit switching','Dedicated leased circuits','Static addressing']),
+mc(1,S1,'What do circuit-switched networks establish that packet-switched networks do not?','A dedicated circuit between the endpoints',['Multiple redundant paths for every packet','Best-effort delivery','Segmented messages']),
+mc(1,S1,'Live video keeps pausing because demand for bandwidth exceeds what is available and nothing prioritizes it. What is missing?','Quality of Service (QoS)',['A larger MTU','A default gateway','Port security']),
+mc(1,S1,'Which two items are part of network infrastructure security? (Choose two.)',['Physical security of network devices','Preventing unauthorized access to the devices'],['Protecting the data transmitted over the network','Encrypting email content','Choosing a cloud provider']),
+mat(1,S1,'Match each security goal to its meaning.',[['Confidentiality','Only intended recipients can read the data'],['Integrity','Data has not been altered during transmission'],['Availability','Timely, reliable access to data for authorized users']]),
+mc(1,S1,'Which two are internal threats? (Choose two.)',['Accidental misuse by employees','Lost or stolen devices'],['Zero-day attacks','Denial of service attacks from the Internet','Data interception on the public Internet']),
+mc(1,S1,'Which two security components are the basics for a home or small office network? (Choose two.)',['Antivirus and antispyware on end devices','Firewall filtering to block unauthorized access'],['Dedicated intrusion prevention appliances','Access control lists on distribution switches','Site-to-site VPN concentrators']),
+mc(1,S1,'Which two security solutions are typically ADDED on larger networks? (Choose two.)',['Intrusion prevention systems (IPS)','Access control lists (ACLs)'],['Antivirus on one laptop','A single shared Wi-Fi password','A bigger monitor']),
+mat(1,W,'Match each device to its role.',[['Switch','Forwards frames within a local network'],['Router','Moves packets between IP networks'],['Wireless access point','Connects Wi-Fi clients to the rest of the LAN'],['Firewall','Enforces traffic policy: permit, deny or inspect']]),
+mc(1,W,'Which statement about a wireless access point is true?','It bridges a radio access method into the rest of the LAN and is not inherently the Internet router or firewall.',['It always routes traffic between IP networks.','It is the default gateway in every network.','It enforces all firewall policy by itself.']),
+mc(1,W,'What is the difference between a server and a service?','A server is a system that provides services; a service is the useful function such as web, DNS or files.',['They mean exactly the same thing.','A service is always one physical tower in one room.','A server can only ever provide one service.']),
+mc(1,W,'Which statement about services is true?','One service may be spread across many servers, and one server may run several services.',['Each service needs its own physical server.','A service can only run on one server.','Servers can run no more than one service.']),
+mc(1,W,'Which two can create virtual network interfaces on a computer? (Choose two.)',['VPN software','Virtualization or container software'],['A straight-through cable','A wireless access point','A hub']),
+mc(1,W,'A laptop reports several network interfaces. What is a sensible first step when troubleshooting?','Identify the interface actually in use',['Reinstall the operating system','Replace the switch','Disable all firewalls']),
+mc(1,W,'Which two are examples of physical network interfaces? (Choose two.)',['Ethernet','Wi-Fi'],['VPN tunnel adapter','Virtual machine adapter','Container bridge']),
+mc(1,W,'Which diagram describes networks, trust zones, addressing, routes and intended traffic flows?','Logical topology',['Physical topology','Rack elevation diagram','Cable run sheet']),
+mc(1,W,'Which diagram describes devices, ports, cables, radios, racks and locations?','Physical topology',['Logical topology','Routing table','Trust zone map']),
+mc(1,W,'In the path Endpoint → Access network → Gateway/firewall → ISP → Remote service, which is a single point of failure for a small office with only one gateway/firewall device?','The gateway/firewall',['The remote Internet service','Each individual endpoint','The Wi-Fi radio signal']),
+
+/* ---------------- Module 3 (Protocols and Models deck + Week 2 models) ---------------- */
+mc(3,M3,'What are the three elements of any communication?','A source, a destination and a channel',['A client, a server and a router','A header, a trailer and a payload','A frame, a packet and a segment']),
+mc(3,M3,'Which three are requirements that network protocols must agree on? (Choose three.)',['Message encoding','Message size','Message timing'],['Message color','Message font','Message weight']),
+mc(3,M3,'Message formats depend on which two factors? (Choose two.)',['The type of message','The channel used to deliver it'],['The age of the device','The color of the cable','The brand of the router']),
+mat(3,M3,'Match each protocol type to its description.',[['Network communications','Lets two or more devices communicate over one or more networks'],['Network security','Provides authentication, data integrity and encryption'],['Routing','Lets routers exchange route information and select the best path'],['Service discovery','Automatically detects devices or services']]),
+mat(3,M3,'Match each protocol function to its description.',[['Addressing','Identifies sender and receiver'],['Reliability','Provides guaranteed delivery'],['Flow control','Ensures data flows at an efficient rate'],['Sequencing','Uniquely labels each transmitted segment'],['Error detection','Determines whether data became corrupted'],['Application interface','Process-to-process communication between network applications']]),
+mat(3,M3,'Match each protocol to its job when a client loads a web page.',[['HTTP','Governs how the web client and server interact'],['TCP','Manages individual conversations with guaranteed delivery and flow control'],['IP','Delivers messages globally from sender to receiver'],['Ethernet','Delivers frames from one NIC to another on the same LAN']]),
+mc(3,M3,'What is a protocol suite?','A group of inter-related protocols needed to perform a communication function',['A single protocol that does everything','A set of cables and connectors','A vendor’s product license']),
+mc(3,M3,'What does it mean that TCP/IP is an open standard?','It is freely available to the public and can be used by any vendor',['It is owned by a single vendor','It is only used on the Internet backbone','It requires a license for each device']),
+mc(3,M3,'Which two are benefits of a layered model? (Choose two.)',['It fosters competition because products from different vendors can work together','It provides a common language to describe networking functions'],['It makes every layer depend on every other layer','It guarantees faster hardware']),
+ord(3,M3,'Arrange the OSI layers from Layer 7 (top) down to Layer 1.',['Application','Presentation','Session','Transport','Network','Data Link','Physical']),
+ord(3,M3,'Arrange the PDU names in the order they appear as data moves DOWN the TCP/IP stack.',['Data','Segment','Packet','Frame','Bits']),
+ord(3,W,'Put the encapsulation steps of a web request in order (first to last).',['Application data is created','Transport information (ports) is added','IP information (addresses) is added','Local-link information (frame/MAC) is added','Bits are transmitted on the medium']),
+ord(3,W,'Put the de-encapsulation steps at the destination in order (first to last).',['Bits are received','Local-link information is processed and removed','The IP packet is delivered upward','Transport identifies the conversation','The application receives its data']),
+mat(3,W,'Match each OSI layer to its responsibility.',[['Application','Network services used by applications'],['Presentation','Representation, encoding, compression, protection formats'],['Session','Conversation establishment and management'],['Transport','End-to-end conversations, TCP/UDP, ports'],['Network','IP and movement between networks'],['Data Link','Local-link frames and delivery'],['Physical','Bits on copper, fiber or radio']]),
+mat(3,M3,'Match each TCP/IP layer to its description.',[['Application','Represents data to the user, plus encoding and dialog control'],['Transport','Supports communication between devices across diverse networks'],['Internet','Determines the best path through the network'],['Network Access','Controls the hardware devices and media']]),
+mc(3,W,'Which TCP/IP layer corresponds roughly to OSI Layers 1 and 2?','Network Access',['Internet','Transport','Application']),
+mc(3,M3,'The TCP/IP protocol suite does not specify…','which protocols to use when transmitting over a physical medium',['how IP addresses are written','what TCP does','how applications are named']),
+mc(3,W,'Why do OSI and TCP/IP have different numbers of layers?','Each model simplifies real implementations differently, so the mapping is approximate',['One of them is wrong','OSI is only for wireless','TCP/IP does not use encapsulation']),
+mc(3,W,'What does encapsulation accomplish?','Each layer adds the information it needs to perform its responsibility',['It encrypts all data','It deletes headers','It makes data smaller']),
+mc(3,W,'What do intermediate devices usually inspect?','Only the layers needed for their role',['Every layer, always','Only the application data','Only the physical signals']),
+mat(3,W,'Match each device to the OSI layer commonly associated with it.',[['Hub / repeater','Layer 1'],['Switch','Layer 2'],['Router','Layer 3'],['Stateful firewall','Layers 3 and 4'],['Application proxy / firewall','Layer 7']]),
+mc(3,M3,'Which two are primary benefits of segmenting messages? (Choose two.)',['Increases speed: large data can be sent without tying up the link','Increases efficiency: only failed segments are retransmitted'],['Removes the need for sequencing','Guarantees no segment is ever lost']),
+mc(3,M3,'What is multiplexing?','Interleaving multiple streams of segmented data on the same link',['Breaking a message into frames','Numbering segments','Encrypting segments']),
+mc(3,M3,'Which protocol is responsible for sequencing the individual segments?','TCP',['IP','Ethernet','ICMP']),
+mc(3,M3,'What happens to each layer’s header during de-encapsulation?','Each layer strips off its header and passes the data up',['Headers are added again','Headers are ignored by all layers','Only the physical layer reads them']),
+mc(3,M3,'Protocols can be implemented in…','software, hardware, or both',['software only','hardware only','neither; they are only documents']),
+
+/* ---------------- Module 5 (Binary and IPv4 numbering deck) ---------------- */
+mc(5,M5,'Binary is a base-2 system. What is its radix?','2',['8','10','16']),
+mc(5,M5,'What is the radix of the decimal system?','10',['2','8','16']),
+mc(5,M5,'In an 8-bit octet, what is the value of position 7 (the leftmost bit)?','128',['64','256','127']),
+mc(5,M5,'In an 8-bit octet, what is the value of position 0 (the rightmost bit)?','1',['0','2','8']),
+mc(5,M5,'Positional notation means…','A digit represents different values depending on its position in the number',['Every digit has the same value','Digits can only be 0 or 1','The number is always hexadecimal']),
+mc(5,M5,'What are the individual 1s and 0s in a binary number called?','Bits',['Octets','Bytes','Nibbles']),
+mc(5,M5,'How many bits are in one octet (one byte)?','8',['4','16','32']),
+mc(5,M5,'Converting decimal to binary: if the octet value is greater than or equal to the current position value, what do you do?','Write a 1 and subtract the position value',['Write a 0 and subtract it','Write a 1 and add it','Skip to the next octet']),
+mc(5,M5,'Converting decimal to binary: if the octet value is LESS than the current position value, what do you do?','Write a 0 and move to the next position',['Write a 1 and subtract','Stop converting','Double the value']),
+mc(5,M5,'Where do you start when converting a decimal octet to binary using the position table?','At the 128 position (the most significant bit)',['At the 1 position','At the 64 position','Anywhere you like']),
+ord(5,M5,'Convert decimal 168 to binary. Put the steps in order.',['128: 168 ≥ 128, write 1, subtract → 40','64: 40 < 64, write 0','32: 40 ≥ 32, write 1, subtract → 8','16: 8 < 16, write 0','8: 8 ≥ 8, write 1, subtract → 0','4, 2, 1: nothing left, write 0 0 0']),
+mc(5,M5,'What do computers and routers actually understand?','Binary',['Dotted decimal','Hexadecimal','English']),
+mc(5,M5,'Why is dotted decimal used for IPv4 addresses?','It is easier for people to read than 32 binary digits',['Routers cannot read binary','It uses less memory','Ethernet requires it']),
+mc(5,M5,'What does 1×128 + 1×64 + 0 + 0 + 0 + 0 + 0 + 0 equal?','192',['128','64','255']),
+
+/* ---------------- Week 2: commands, evidence, hierarchy, security lens ---------------- */
+mat(13,W,'Match each Windows command to what it reveals.',[['Get-NetAdapter','Which network interfaces exist and their status'],['ipconfig /all','IP configuration, default gateway, DNS servers and MAC address'],['route print -4','The IPv4 routing table'],['ping 127.0.0.1','Whether the local TCP/IP stack works'],['tracert -d -h 12 -w 1000 1.1.1.1','The path to a destination (up to 12 hops) without name lookups']]),
+mc(13,W,'In a traceroute, one hop shows * but the destination still replies. What does that tell you?','Silence means no response to the probe, not automatic proof of failure',['The destination is down','The whole path is broken','The default gateway is misconfigured']),
+mc(13,W,'Which three can cause a ping or traceroute probe to time out even though the destination works? (Choose three.)',['A firewall filters the diagnostic message','Rate limiting discards diagnostic responses','The return path differs from the forward path'],['The cable is perfect','The destination answers every probe','IP addressing is not used']),
+mc(13,W,'What does the -d option do in tracert -d?','It prevents resolving addresses to host names',['It displays only the destination','It sets the maximum hop count','It sends larger packets']),
+mc(13,W,'Which Windows command shows the interface IP configuration and default gateway?','ipconfig /all',['route print -4','ping 127.0.0.1','tracert -d']),
+mc(16,W,'Which three kinds of information can diagnostic output reveal about an organization? (Choose three.)',['Host and domain names','Gateways and name servers','VPN and virtualization software'],['The user’s password','The contents of encrypted files','The brand of the monitor']),
+mc(16,W,'What is the best practice with diagnostic output such as ipconfig /all?','Collect what you need and share it only where appropriate',['Post it publicly to get help','Never collect any output','Email it to everyone']),
+mc(16,W,'Where can a firewall run? (Choose three.)',['At the network edge','Between internal zones','On a host'],['Only on the ISP backbone','Only inside a cable','Only on the destination web server']),
+mc(16,W,'A firewall can only see traffic that…','crosses its observation point',['originates on another continent','uses IPv6','is encrypted']),
+mc(16,W,'Why does a firewall’s placement matter?','It determines what the firewall can protect and what evidence it can collect',['It changes the IP address of every host','It makes the firewall faster','It has no effect on visibility']),
+mat(17,W,'Match each hierarchical design function to its job.',[['Access','Endpoints enter the network'],['Distribution','Aggregates access networks and applies policy'],['Core','Resilient, high-speed transport between major areas']]),
+mc(17,W,'In a small network, how are access, distribution and core functions usually provided?','Collapsed into fewer physical devices',['Each needs its own dedicated chassis','They are not needed','Only the core is ever required']),
+mc(17,W,'Which two are ways hierarchical design helps security? (Choose two.)',['Creates understandable trust boundaries','Identifies useful monitoring points'],['Requires three separate firewalls','Removes the need for policy','Prevents all failures']),
+mc(17,W,'Hierarchical design is best described as…','A design lens, not a requirement to buy three boxes',['A mandatory hardware shopping list','A routing protocol','A cable standard']),
+mc(17,W,'Which hierarchical function aggregates access networks and applies policy?','Distribution',['Access','Core','Physical layer']),
+mc(17,W,'Which hierarchical function provides resilient, high-speed transport between major areas?','Core',['Access','Distribution','Endpoint'])
+];
+})();
