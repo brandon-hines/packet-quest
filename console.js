@@ -511,7 +511,8 @@ function startLab(lab,tier,focusMod){
       <div class="lesson" id="lesson"></div>
     </div>
     <div class="term" id="term"><div id="tout"></div><div class="inrow"><span id="tprompt"></span><input id="tin" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div></div>
-    <div class="small">Keys: <kbd>?</kbd> help · <kbd>Tab</kbd> complete a word · <kbd>↑</kbd><kbd>↓</kbd> history · <kbd>Ctrl+Z</kbd> = end · abbreviations like <code>conf t</code> work</div>
+    <div class="tkeys"><button data-k="help">?</button><button data-k="tab">Tab</button><button data-k="up">↑</button><button data-k="down">↓</button><button data-k="ctrlz">Ctrl+Z</button><button data-k="enter" class="pri">Enter ⏎</button></div>
+    <div class="small deskkeys">Keys: <kbd>?</kbd> help · <kbd>Tab</kbd> complete a word · <kbd>↑</kbd><kbd>↓</kbd> history · <kbd>Ctrl+Z</kbd> = end · abbreviations like <code>conf t</code> work</div>
    </div>`,{full:true,closable:false,cls:'labpanel'});
   const out=el.querySelector('#tout'), term=el.querySelector('#term'), inp=el.querySelector('#tin'), prm=el.querySelector('#tprompt'),
         lesson=el.querySelector('#lesson'), stepsEl=el.querySelector('#steps'), mm=el.querySelector('#mm');
@@ -588,16 +589,27 @@ function startLab(lab,tier,focusMod){
     const v=inp.value; line(promptStr()+v+'?','echo');
     const h=helpFor(d,v);
     if(!h.items.length&&!h.cr) line('% Unrecognized command','err');
-    else { h.items.forEach(([k,ds])=>line('  '+k.padEnd(24)+' '+(ds||''))); if(h.cr) line('  <cr>'); }
+    else { const narrow=term.clientWidth<520; h.items.forEach(([k,ds])=>line(narrow?('  '+k+(ds?'\n      '+ds:'')):('  '+k.padEnd(24)+' '+(ds||'')))); if(h.cr) line('  <cr>'); }
     check(v.trim()===''?'help':'help-partial');
   }
+  const KEY = {
+    enter(){ submit(); },
+    tab(){ if(d.pending) return; const t=complete(d,inp.value); if(t) inp.value=t; else sfx.click(); },
+    help(){ if(!d.pending) showHelp(); },
+    up(){ if(hi>0){ hi--; inp.value=hist[hi]; } },
+    down(){ if(hi<hist.length-1){ hi++; inp.value=hist[hi]; } else { hi=hist.length; inp.value=''; } },
+    ctrlz(){ if(['config','line','if'].includes(d.mode)){ line(promptStr()+'^Z','echo'); d.mode='priv'; d.line=null; d.iface=null; renderMode(); check('end'); } }
+  };
   inp.addEventListener('keydown',e=>{
-    if(e.key==='Enter'){ e.preventDefault(); submit(); }
-    else if(e.key==='Tab'){ e.preventDefault(); if(d.pending) return; const c=complete(d,inp.value); if(c) inp.value=c; else sfx.click(); }
-    else if(e.key==='?'&&!d.pending){ e.preventDefault(); showHelp(); }
-    else if(e.key==='ArrowUp'){ e.preventDefault(); if(hi>0){ hi--; inp.value=hist[hi]; } }
-    else if(e.key==='ArrowDown'){ e.preventDefault(); if(hi<hist.length-1){ hi++; inp.value=hist[hi]; } else { hi=hist.length; inp.value=''; } }
-    else if(e.ctrlKey&&(e.key==='z'||e.key==='Z')){ e.preventDefault(); if(['config','line','if'].includes(d.mode)){ line(promptStr()+'^Z','echo'); d.mode='priv'; d.line=null; d.iface=null; renderMode(); check('end'); } }
+    const k = e.key==='Enter'?'enter' : e.key==='Tab'?'tab' : e.key==='?'?'help' : e.key==='ArrowUp'?'up' : e.key==='ArrowDown'?'down' : (e.ctrlKey&&(e.key==='z'||e.key==='Z'))?'ctrlz' : null;
+    if(!k || (k==='help'&&d.pending)) return;
+    e.preventDefault(); KEY[k]();
+  });
+  // phone keyboards often skip keydown for '?': catch it from the typed text instead
+  inp.addEventListener('input',()=>{ if(!d.pending && inp.value.endsWith('?')){ inp.value=inp.value.slice(0,-1); showHelp(); } });
+  el.querySelectorAll('.tkeys button').forEach(b=>{
+    b.addEventListener('pointerdown',e=>e.preventDefault());   // keep the on-screen keyboard open
+    b.addEventListener('click',()=>{ if(done) return; KEY[b.dataset.k](); inp.focus(); });
   });
   term.addEventListener('click',()=>inp.focus());
   el.querySelector('#lquit').onclick=()=>openLabs(focusMod);
