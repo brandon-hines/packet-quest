@@ -40,6 +40,9 @@
   .opt.gone{display:none}
   .fb{margin-top:8px;font-size:13px;line-height:1.4}
   .fb b.good{color:var(--good)}.fb b.bad{color:var(--bad)}
+  .why{margin-top:6px;padding:8px 10px;border-radius:6px;background:var(--panel2);border-left:4px solid var(--good);display:grid;gap:4px;line-height:1.45}
+  .why.miss{border-left-color:var(--bad);background:#2a1622}
+  .fbx{margin-top:4px}
   .battle .field{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:6px}
   .battle .side{display:flex;flex-direction:column;align-items:center;gap:3px;width:42%;font-size:12px}
   .battle canvas{image-rendering:pixelated;width:64px;height:64px}
@@ -129,6 +132,7 @@
 
 <script src="questions.js"></script>
 <script src="extra_questions.js"></script>
+<script src="explanations.js"></script>
 <script>
 'use strict';
 /* =====================================================================
@@ -172,11 +176,11 @@ const QS = RAW_QUESTIONS.trim().split('\n').map((l,i)=>{
 });
 const QBYM = {};
 (window.EXTRA_QUESTIONS||[]).forEach(e=>{ e.id=QS.length; e.gen=false; QS.push(e); });
-QS.forEach(q => (QBYM[q.m] = QBYM[q.m] || []).push(q));
+QS.forEach(q => { if(!q.why && window.EXPLANATIONS && EXPLANATIONS[q.id]) q.why=EXPLANATIONS[q.id]; (QBYM[q.m] = QBYM[q.m] || []).push(q); });
 function answerText(q){
   if(q.type==='order') return q.items.join(' → ');
   if(q.type==='match') return q.pairs.map(p=>p[0]+' = '+p[1]).join(' · ');
-  if(q.type==='bits') return q.why||'';
+  if(q.type==='bits') return q.target.toString(2).padStart(8,'0')+' = '+q.target;
   return q.a.map(a=>q.o[a]).join(' · ');
 }
 
@@ -820,12 +824,16 @@ function askQuestion(box,q,opt={}){
   const type=q.type||'mcq';
   let done=false, resolve; const promise=new Promise(r=>resolve=r);
   const multi=type==='mcq'&&q.a.length>1, hasHint=/choose|select|apply/i.test(q.q);
-  box.innerHTML=`<div class="qtext">${esc(q.q)}${multi&&!hasHint?` <em>(select ${q.a.length})</em>`:''}${q.src?`<span class="tag">📑 ${esc(q.src)}</span>`:''}</div><div class="qbody"></div><div class="row" id="qctl"></div><div class="fb"></div>`;
+  box.innerHTML=`<div class="qtext">${esc(q.q)}${multi&&!hasHint?` <em>(select ${q.a.length})</em>`:''}${q.src?`<span class="tag">📑 ${esc(q.src)}</span>`:''}</div><div class="qbody"></div><div class="fb"></div><div class="row" id="qctl"></div>`;
   const body=box.querySelector('.qbody'), ctl=box.querySelector('#qctl'), fb=box.querySelector('.fb');
   function conclude(ok,reveal){
     if(done) return; done=true; if(reveal) reveal();
     const extra = opt.onResult ? (opt.onResult(ok)||'') : '';
-    fb.innerHTML = (ok?'<b class="good">✔ Correct!</b>':'<b class="bad">✘ Not quite.</b> The right answer is shown above.')+(q.why?`<br><span class="small">💡 ${esc(q.why)}</span>`:'')+(extra?`<br>${extra}`:'');
+    const showAns = !['order','match'].includes(type);
+    fb.innerHTML = ok
+      ? '<b class="good">✔ Correct!</b>'+(q.why?`<div class="why ok">💡 ${esc(q.why)}</div>`:'')+(extra?`<div class="fbx">${extra}</div>`:'')
+      : '<b class="bad">✘ Not quite.</b>'+(extra?`<div class="fbx">${extra}</div>`:'')
+        +`<div class="why miss">${showAns?`<div><b>Correct answer:</b> ${esc(answerText(q))}</div>`:''}${q.why?`<div><b>Why:</b> ${esc(q.why)}</div>`:''}<div class="small">📜 Review: Module ${q.m}, ${esc(MOD(q.m).name)} (Library → Scroll)</div></div>`;
     ctl.innerHTML='';
     const nb=document.createElement('button'); nb.className='pri'; nb.textContent=opt.nextLabel||'Continue ▶'; nb.onclick=()=>{sfx.click();resolve(ok)}; ctl.appendChild(nb); nb.focus();
   }
@@ -1093,7 +1101,7 @@ function runQuiz(title,qs,{reward=5}={}){
   step();
 }
 function reviewMisses(list){
-  const el=openPanel(`<h2>Review</h2>${list.map(q=>`<p><b>M${q.m}:</b> ${esc(q.q)}<br><span style="color:var(--good)">✔ ${esc(answerText(q))}</span></p>`).join('<hr style="border-color:#2d3270">')}<div class="row"><button class="pri" id="ok">Close</button></div>`,{});
+  const el=openPanel(`<h2>Review</h2>${list.map(q=>`<p><b>M${q.m}:</b> ${esc(q.q)}<br><span style="color:var(--good)">✔ ${esc(answerText(q))}</span>${q.why?`<br><span class="small">${esc(q.why)}</span>`:''}</p>`).join('<hr style="border-color:#2d3270">')}<div class="row"><button class="pri" id="ok">Close</button></div>`,{});
   el.querySelector('#ok').onclick=closePanel;
 }
 function startExam(){
